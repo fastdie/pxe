@@ -1,0 +1,99 @@
+#!ipxe
+
+# Variables are specified in boot.ipxe.cfg
+
+# Some menu defaults
+# set menu-timeout 0 if no client-specific settings found
+isset ${menu-timeout} || set menu-timeout 0
+set submenu-timeout ${menu-timeout}
+isset ${menu-default} || set menu-default exit
+
+# Figure out if client is 64-bit capable
+cpuid --ext 29 && set arch x64 || set arch x86
+cpuid --ext 29 && set archl amd64 || set archl i386
+
+###################### MAIN MENU ####################################
+
+:start
+menu iPXE boot menu for ${initiator-iqn}
+item --gap --             ------------------------- Install System Tools ---------------------------
+item --key d menu-diag    MemTest86 and Win10PE
+item --gap --             ------------------------- Advanced options -------------------------------
+item --key c config       Configure settings
+item shell                Drop to iPXE shell
+item reboot               Reboot computer
+item
+item --key x exit         Exit iPXE and continue BIOS boot
+choose --timeout ${menu-timeout} --default ${menu-default} selected || goto cancel
+set menu-timeout 0
+goto ${selected}
+
+:cancel
+echo You cancelled the menu, dropping you to a shell
+
+:shell
+echo Type 'exit' to get the back to the menu
+shell
+set menu-timeout 0
+set submenu-timeout 0
+goto start
+
+:failed
+echo Booting failed, dropping to shell
+goto shell
+
+:reboot
+reboot
+
+:exit
+exit
+
+:config
+config
+goto start
+
+:back
+set submenu-timeout 0
+clear submenu-default
+goto start
+
+###################### SYSTEM TOOL MENU #############################
+
+:menu-diag
+menu Memtest-Tools and Win10pe_for_OS_installation
+item memtest	Memtest-Tools
+item win10pe	Win10pe_for_OS_installation
+item win10pe_lite	Win10PE_Lite
+item win10pe_full	Win10PE_Full
+item
+item --key 0x08 back Back to top menu...
+iseq ${menu-default} menu-diag && isset ${submenu-default} && goto menu-diag-timed ||
+choose selected && goto ${selected} || goto start
+:menu-diag-timed
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected && goto ${selected} || goto start
+
+:memtest
+set base-url http://${next-server}/iso
+initrd ${base-url}/mt531b.iso
+chain memdisk iso raw || goto failed
+goto start
+
+:win10pe
+set base-url http://${next-server}/iso
+initrd ${base-url}/win10pe.iso
+chain memdisk iso raw || goto failed
+goto start
+
+:win10pe_lite
+set base-url http://${next-server}/iso
+initrd ${base-url}/win10pe_lite.iso
+chain memdisk iso raw || goto failed
+goto start
+
+:win10pe_full
+set base-url http://${next-server}/iso
+initrd ${base-url}/win10pe_full.iso
+chain memdisk iso raw || goto failed
+goto start
+
+###################### MENU END #############################
