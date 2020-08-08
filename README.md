@@ -1,0 +1,2 @@
+# pxe
+ ipxe netboot
