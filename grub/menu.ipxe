@@ -17,7 +17,7 @@ cpuid --ext 29 && set archl amd64 || set archl i386
 :start
 menu iPXE boot menu for ${next-server}
 item --gap --             ------------------------- Tools and utilities ----------------------------
-item --key d menu-diag    System tools...
+item --key d menu-diag    Memtest-Tools and Win10pe_for_OS_installation
 item --gap --             ------------------------- Advanced options -------------------------------
 item --key c config       Configure settings
 item shell                Drop to iPXE shell
