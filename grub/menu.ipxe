@@ -65,7 +65,7 @@ item memtest	Memtest-Tools
 item win10pe	Win10pe_for_OS_installation
 item win10pe_lite	Win10PE_Lite
 item win10pe_full	Win10PE_Full
-item ubuntu	ubuntu_installer
+item ubuntu_20.04	ubuntu_20.04_live_CD
 item
 item --key 0x08 back Back to top menu...
 iseq ${menu-default} menu-diag && isset ${submenu-default} && goto menu-diag-timed ||
@@ -97,7 +97,7 @@ initrd ${base-url}/win10pe_full.iso
 chain memdisk iso raw || goto failed
 goto start
 
-:ubuntu
+:ubuntu_20.04
 set base-url 192.168.100.100:/volume1/NFS/ubuntu
 kernel nfs://${base-url}/casper/vmlinuz || read void
 initrd nfs://${base-url}/casper/initrd || read void
