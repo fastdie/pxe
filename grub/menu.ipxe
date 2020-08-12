@@ -15,7 +15,7 @@ cpuid --ext 29 && set archl amd64 || set archl i386
 ###################### MAIN MENU ####################################
 
 :start
-menu iPXE boot menu for ${initiator-iqn}
+menu iPXE boot menu for ${next-server}
 item --gap --             ------------------------- Tools and utilities ----------------------------
 item --key d menu-diag    System tools...
 item --gap --             ------------------------- Advanced options -------------------------------
@@ -74,25 +74,25 @@ choose selected && goto ${selected} || goto start
 choose --timeout ${submenu-timeout} --default ${submenu-default} selected && goto ${selected} || goto start
 
 :memtest
-set base-url http://${nas_ip}/pxe/iso
+set base-url http://${next-server}/pxe/iso
 initrd ${base-url}/memtest86.iso
 chain memdisk iso raw || goto failed
 goto start
 
 :win10pe
-set base-url http://${nas_ip}/pxe/iso
+set base-url http://${next-server}/pxe/iso
 initrd ${base-url}/win10pe.iso
 chain memdisk iso raw || goto failed
 goto start
 
 :win10pe_lite
-set base-url http://${nas_ip}/pxe/iso
+set base-url http://${next-server}/pxe/iso
 initrd ${base-url}/win10pe_lite.iso
 chain memdisk iso raw || goto failed
 goto start
 
 :win10pe_full
-set base-url http://${nas_ip}/pxe/iso
+set base-url http://${next-server}/pxe/iso
 initrd ${base-url}/win10pe_full.iso
 chain memdisk iso raw || goto failed
 goto start
