@@ -47,3 +47,7 @@
 你可以将微软原版镜像文件或修改后的WIM、ESD文件上传到 "/opt/pxe/wim" 目录下；
 
 当你启动到支持网络的winpe环境，你可以通过samba协议加载微软原版镜像文件，借助winpe工具给网启计算机重装系统；
+
+九、上传ubuntu20.04 live-cd
+
+你可以将ubuntu20.04 live-cd 中的所有文件拷贝到 "/opt/pxe/wim/ubuntu" 目录下；然后通过网启方式启动到 ubuntu desktop 环境下；
