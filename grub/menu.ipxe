@@ -65,7 +65,6 @@ item memtest	Memtest-Tools
 item win10pe	Win10pe_for_OS_installation
 item win10pe_lite	Win10PE_Lite
 item win10pe_full	Win10PE_Full
-item ubuntu_20.04	ubuntu_20.04_live_CD
 item
 item --key 0x08 back Back to top menu...
 iseq ${menu-default} menu-diag && isset ${submenu-default} && goto menu-diag-timed ||
@@ -74,13 +73,13 @@ choose selected && goto ${selected} || goto start
 choose --timeout ${submenu-timeout} --default ${submenu-default} selected && goto ${selected} || goto start
 
 :memtest
-set base-url http://${next-server}/pxe/iso
-initrd ${base-url}/memtest86.iso
+set base-url http://${next-server}/iso
+initrd ${base-url}/mt531b.iso
 chain memdisk iso raw || goto failed
 goto start
 
 :win10pe
-set base-url http://${next-server}/pxe/iso
+set base-url http://${next-server}/iso
 initrd ${base-url}/win10pe.iso
 chain memdisk iso raw || goto failed
 goto start
@@ -97,12 +96,6 @@ initrd ${base-url}/win10pe_full.iso
 chain memdisk iso raw || goto failed
 goto start
 
-:ubuntu_20.04
-set base-url 192.168.100.100:/volume1/NFS/ubuntu
-kernel nfs://${base-url}/casper/vmlinuz || read void
-initrd nfs://${base-url}/casper/initrd || read void
-imgargs vmlinuz initrd=initrd root=/dev/nfs boot=casper netboot=nfs nfsroot=${base-url} ip=dhcp splash quiet -- || read void
-boot || read void
 # If everything failed, give the user some options
 echo Boot from ${base-url} failed
 prompt --key 0x197e --timeout 30000 Press F12 to investigate || exit
